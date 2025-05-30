@@ -7,6 +7,7 @@ import br.com.fiap.baitersburger.core.domain.enums.OrderStatus;
 import br.com.fiap.baitersburger.core.domain.model.Order;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -25,29 +26,37 @@ class FindOrderByStatusAdapterTest {
     @Mock
     private OrderRepository orderRepository;
 
-    @Mock
+
     private OrderEntityMapper orderEntityMapper;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
+        orderEntityMapper = Mappers.getMapper(OrderEntityMapper.class);
+        adapter = new FindOrderByStatusAdapter(orderRepository,orderEntityMapper);
     }
 
     @Test
     void returnsOrdersWhenStatusExistsInRepositoryTest() {
-        var orderEntity1 = new OrderEntity();
-        var orderEntity2 = new OrderEntity();
+
         var order1 = new Order();
+        order1.setId("1");
+        order1.setStatus(OrderStatus.RECEIVED);
+
         var order2 = new Order();
+        order2.setId("2");
+        order2.setStatus(OrderStatus.RECEIVED);
+
+        var orderEntity1 = orderEntityMapper.toOrderEntity(order1);
+        var orderEntity2 = orderEntityMapper.toOrderEntity(order2);
+
         when(orderRepository.findByStatus(OrderStatus.RECEIVED)).thenReturn(List.of(orderEntity1, orderEntity2));
-        when(orderEntityMapper.toOrder(orderEntity1)).thenReturn(order1);
-        when(orderEntityMapper.toOrder(orderEntity2)).thenReturn(order2);
 
         var result = adapter.findByStatus(OrderStatus.RECEIVED);
 
         assertEquals(2, result.size());
-        assertTrue(result.contains(order1));
-        assertTrue(result.contains(order2));
+        assertTrue(result.stream().anyMatch(x -> x.getId().equals("1")));
+        assertTrue(result.stream().anyMatch(x -> x.getId().equals("2")));
     }
 
     @Test
