@@ -35,7 +35,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<Customer> insert(@Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
+    public ResponseEntity<Void> insert(@Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
         var customer = customerMapper.toCustomer(customerRequestDTO);
         insertCustomerInputPort.insert(customer);
         return ResponseEntity.status(HttpStatus.CREATED).build();
