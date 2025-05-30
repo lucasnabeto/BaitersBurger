@@ -33,7 +33,7 @@ class FindCustomerByCpfAdapterTest {
     }
 
     @Test
-    void returnsCustomerWhenCpfExistsInRepository() {
+    void returnsCustomerWhenCpfExistsInRepositoryTest() {
         var customerEntity = new CustomerEntity();
         var customer = new Customer("1", "12345678909", "Test User", "teste@baitersburger.com.br");
         when(customerRepository.findByCpf("12345678909")).thenReturn(Optional.of(customerEntity));
@@ -46,7 +46,7 @@ class FindCustomerByCpfAdapterTest {
     }
 
     @Test
-    void returnsEmptyOptionalWhenCpfDoesNotExistInRepository() {
+    void returnsEmptyOptionalWhenCpfDoesNotExistInRepositoryTest() {
         when(customerRepository.findByCpf("99999999999")).thenReturn(Optional.empty());
 
         var result = adapter.find("99999999999");
@@ -55,7 +55,7 @@ class FindCustomerByCpfAdapterTest {
     }
 
     @Test
-    void returnsCustomerWhenEmailExistsInRepository() {
+    void returnsCustomerWhenEmailExistsInRepositoryTest() {
         var customerEntity = new CustomerEntity();
         var customer = new Customer("1", "12345678909", "Test User", "teste@baitersburger.com.br");
         when(customerRepository.findByEmail("test@example.com")).thenReturn(Optional.of(customerEntity));
@@ -68,7 +68,7 @@ class FindCustomerByCpfAdapterTest {
     }
 
     @Test
-    void returnsEmptyOptionalWhenEmailDoesNotExistInRepository() {
+    void returnsEmptyOptionalWhenEmailDoesNotExistInRepositoryTest() {
         when(customerRepository.findByEmail("notfound@example.com")).thenReturn(Optional.empty());
 
         var result = adapter.findByEmail("notfound@example.com");
